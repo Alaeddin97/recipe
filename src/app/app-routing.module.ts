@@ -4,6 +4,7 @@ import { AuthGuard } from './Auth-guard.service'
 import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component'
 import { canDeactivateGuard } from './recipes/recipe-edit/canDeactivate.service'
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component'
+import { RecipesResolverService } from './recipes/recipes-resolver.service'
 import { RecipesComponent } from './recipes/recipes.component'
 import { ShoppingListComponent } from './shopping-list/shopping-list.component'
 import { StartRecipeComponent } from './start-recipe/start-recipe.component'
@@ -14,8 +15,8 @@ children:[
     {path:'',component:StartRecipeComponent},
     {path:'new',component:RecipeEditComponent,canActivate:[AuthGuard]},
     // {path:'new',component:RecipeEditComponent,canActivate:[AuthGuard],canDeactivate:[canDeactivateGuard]},
-    {path:':id',component:RecipeDetailComponent},
-    {path:':id/edit',component:RecipeEditComponent}
+    {path:':id',component:RecipeDetailComponent,resolve:[RecipesResolverService]},
+    {path:':id/edit',component:RecipeEditComponent,resolve:[RecipesResolverService]}
     // {path:':id/edit',component:RecipeEditComponent,canDeactivate:[canDeactivateGuard]}
   ]},
 {path:'shopping-list',component:ShoppingListComponent}
