@@ -1,0 +1,75 @@
+<div class="row">
+    <div class="col-xs-12">
+        <form [formGroup]="recipeForm">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-12" style="display: flex;justify-content: space-between;">
+                            <button class="btn btn-success" (click)="onSave()" [disabled]="!recipeForm.valid">Save</button>
+                            <button class="btn btn-danger" (click)="onCancel()">Cancel</button>
+                            <button class="btn btn-primary" (click)="onClear()" [disabled]="!recipeForm.dirty">Clear</button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" formControlName="name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <input type="text" class="form-control" id="description" formControlName="description">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label for="imagePath">Image Path</label>
+                                <input type="text" class="form-control" id="imagePath" formControlName="imagePath">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                          <img [src]="recipeForm.value.imagePath" class="image-responsive" style="max-height: 400px;">
+                        </div>
+                    </div>
+                    <div formArrayName="ingredients" style="margin-top: 10px;">
+                        <div *ngFor="let ingredientControl of recipeForm.get('ingredients')['controls'];let i=index">
+                            <div 
+                            class="row" [formGroupName]="i" 
+                            style="margin-bottom: 10px;">
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" placeholder="Name" name="name" formControlName="name">
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="number" class="form-control" placeholder="Amount" name="amount" formControlName="amount">
+                                </div>
+                                <div class="col-sm-1">
+                                    <button class="btn btn-danger" (click)="onDeleteIng(i)">X</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button class="btn btn-success" (click)="onAddIngredient()" 
+                            style="margin-bottom: 10px;margin-top: 10px;">
+                                {{recipeForm.get('ingredients')['length']>0?'Add another ingredient':'Add ingredient'}}
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
