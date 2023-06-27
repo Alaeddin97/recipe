@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RecipeService } from 'src/app/services/recipe.service';
 import {Subscription} from 'rxjs/Subscription';
 import { AuthService } from 'src/app/services/auth.service';
-
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -28,6 +27,10 @@ export class HeaderComponent implements OnInit,OnDestroy {
   }
   onFetch(){
     this.recipeService.fetchRecipes().subscribe();
+  }
+
+  onLogout(){
+    this.authService.logout();
   }
 
   ngOnDestroy(): void {

@@ -1,18 +1,19 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AuthResponse } from "../shared/auth-response.model";
-import { catchError,tap } from "rxjs/operators";
-import { throwError,BehaviorSubject } from "rxjs";
+import { catchError, tap } from "rxjs/operators";
+import { throwError, BehaviorSubject } from "rxjs";
 import { User } from "../shared/user.model";
+import { Router } from "@angular/router";
 
 @Injectable(
     { providedIn: 'root' }
 )
 export class AuthService {
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient,private router:Router) { }
 
-    userData=new BehaviorSubject<User>(null);
+    userData = new BehaviorSubject<User>(null);
 
     signup(email: string, password: string) {
         return this.http.post<AuthResponse>(
@@ -22,13 +23,13 @@ export class AuthService {
                 password: password,
                 returnSecureToken: true
             })
-            .pipe( tap(
-                (resData:AuthResponse)=>{
-                   this.handleAuthentication(resData.email,resData.localId,resData.idToken,+resData.expiresIn);
+            .pipe(tap(
+                (resData: AuthResponse) => {
+                    this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
                 }
             ),
                 catchError(
-                this.handleError
+                    this.handleError
                 )
             )
     }
@@ -43,8 +44,8 @@ export class AuthService {
             }
         ).pipe(
             tap(
-                (resData:AuthResponse)=>{
-                   this.handleAuthentication(resData.email,resData.localId,resData.idToken,+resData.expiresIn);
+                (resData: AuthResponse) => {
+                    this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
                 }
             ),
             catchError(
@@ -53,10 +54,10 @@ export class AuthService {
         )
     }
 
-    handleAuthentication(email:string,userId:string,token:string,expiresIn:number){
-        const expirationDate=new Date(new Date().getTime() + expiresIn*1000);
-        const user=new User(
-            email,userId,token,expirationDate
+    handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
+        const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+        const user = new User(
+            email, userId, token, expirationDate
         );
         this.userData.next(user);
     }
@@ -80,5 +81,15 @@ export class AuthService {
             case 'TOO_MANY_ATTEMPTS_TRY_LATER':
                 return throwError('Request blocked, try later');
         }
+    }
+
+    logout() {
+        this.userData.next(null);
+        localStorage.clear();
+        this.router.navigate(['auth']);
+    }
+
+    autoLogin(){
+
     }
 }
